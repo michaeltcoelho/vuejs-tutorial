@@ -1,0 +1,36 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue Data Bind</title>
+    <style>
+        .color-red { color: red; }
+        .is-loading { background: red; }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <h4 :class="className">Hello World</h4>
+        <!-- <button v-bind:title="title">Button</button> -->
+        <button :title="title">Button</button>
+        <button :class="{ 'is-loading': isLoading }" @click="toggleClass">Click Me</button>
+    </div>
+    <script src="https://unpkg.com/vue@2.1.3/dist/vue.js"></script>
+    <script>
+        let app = new Vue({
+            el: '#root',
+            data: {
+                title: 'Title by js',
+                className: 'color-red',
+                isLoading: false
+            },
+            methods: {
+                toggleClass() {
+                    this.isLoading = !this.isLoading;
+                }
+            }
+        })
+    </script>
+</body>
+</html>
