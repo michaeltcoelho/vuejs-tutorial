@@ -12,8 +12,26 @@ export default {
   all: (resolve, reject) => {
     return api.get('/')
       .then(({ data }) => {
-        resolve(data.tasks);
+        resolve(data);
       })
       .catch(data => reject(data));
+  },
+  complete: (taskId, completed) => {
+    return (resolve, reject) => {
+      return api.put(`/${taskId}/completed`, {'completed': completed})
+        .then(({ data }) => {
+          resolve(data);
+        })
+        .catch(data => reject(data));
+    }
+  },
+  add: (description) => {
+    return (resolve, reject) => {
+      return api.post('/', { description })
+        .then(({ data }) => {
+          resolve(data);
+        })
+        .catch(data => reject(data));
+    }
   }
 }

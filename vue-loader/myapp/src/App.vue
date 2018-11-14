@@ -1,32 +1,55 @@
 <template>
   <div id="app">
+    <div v-show="error">
+      <p>Error loading tasks...</p>
+    </div>
+    <div>
+      <input type="text" v-model="description" v-on:keyup.13="onNewTask">
+    </div>
     <ul>
-      <li v-for="task in tasks" v-bind:key="task">
-        {{ task }}
+      <li v-for="task in tasks" v-bind:key="task.description">
+        {{ task.description }} - <input type="checkbox" :checked="task.completed" @click="onClick(task.id, task.completed)">
       </li>
     </ul>
-    <message></message>
   </div>
 </template>
 
 <script>
 import MyService from './services/myservice';
-import Message from './components/Message.vue';
 
 export default {
   name: 'app',
-  components: { Message },
+  components: { },
   data () {
     return {
-      tasks: []
+      tasks: [],
+      error: false,
+      description: null
     }
   },
   mounted() {
     MyService.all(tasks => {
       this.tasks = tasks;
     }, error => {
-      console.error(error);
+      this.error = true;
     });
+  },
+  methods: {
+    onClick(taskId, completed) {
+      MyService.complete(taskId, !completed)(
+        data => console.log(data),
+        error => console.error(error)
+      )
+    },
+    onNewTask() {
+      MyService.add(this.description)(
+        data => {
+          this.tasks.push(data);
+          this.description = null;
+        },
+        error => console.error(error)
+      )
+    }
   }
 }
 </script>
